@@ -1,0 +1,75 @@
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class GuardaFSM : StateMachineManager<GuardaFSM.AIState>
+{
+    public enum AIState
+    {
+        Patrol,       // Patrulhando
+        Investigate,  // Investigando algo suspeito
+        Chase,        // Perseguindo ladrão
+        Arrest,       // Prendendo o ladrão
+        Alert         // Chamando reforços/drones
+    }
+    
+    protected override AIState StartingStateKey { get; } = AIState.Patrol;
+    
+    [Header("Configurações")]
+    public float detectionRange = 5f;   // alcance de visão
+    public float arrestRange = 1.5f;    // distância mínima para prender
+    public float moveSpeed = 3f;        // velocidade de movimento
+
+    [Header("Referências")]
+    public Transform originPoint;       // ponto inicial do guarda
+    public List<Transform> patrolPoints; // pontos de patrulha
+
+    public int currentPatrolIndex = 0;
+    public Transform targetEnemy;       // referência ao ladrão
+
+    protected override Dictionary<AIState, BaseState<AIState>> States { get; set; } =
+        new Dictionary<AIState, BaseState<AIState>>()
+        {
+            { AIState.Patrol, new PatrolGuardaState(AIState.Patrol)},
+            { AIState.Investigate, new InvestigateGuardaState(AIState.Investigate)},
+            { AIState.Chase, new ChaseGuardaState(AIState.Chase)},
+            { AIState.Arrest, new ArrestGuardaState(AIState.Arrest)},
+            { AIState.Alert, new AlertGuardaState(AIState.Alert)},
+        };
+
+    protected override void Update()
+    {
+        targetEnemy = GetNearestEnemy();
+        base.Update();
+    }
+
+    #region MétodosAdicionais
+
+    Transform GetNearestEnemy()
+    {
+        var colliders = Physics2D.OverlapCircleAll(transform.position, detectionRange).ToList();
+        if (colliders.Count == 0) return null;
+
+        var smallestDistance = detectionRange * 2;
+        Collider2D closestCollider = null;
+        foreach (var c in colliders)
+        {
+            var dist = Vector2.Distance(transform.position, c.transform.position);
+            if (dist < smallestDistance)
+            {
+                smallestDistance = dist;
+                closestCollider = c;
+            }
+        }
+        
+        return closestCollider?.transform;
+    }
+
+    public void MoveTowards(Vector3 targetPos)
+    {
+        Vector3 direction = (targetPos - transform.position).normalized;
+        transform.position += direction * (moveSpeed * Time.deltaTime);
+    }
+
+    #endregion
+}
