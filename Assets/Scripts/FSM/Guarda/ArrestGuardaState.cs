@@ -31,8 +31,12 @@ public class ArrestGuardaState : BaseState<GuardaFSM.AIState>
             // define oque fazer quando o ladrao e prezo
             Debug.Log("Ladrão capturado!");
 
-            // Exemplo: desativar ladrão
-            _guarda.targetEnemy.gameObject.SetActive(false);
+            // Chama método do ladrão
+            ThiefController thief = _guarda.targetEnemy.GetComponent<ThiefController>();
+            if (thief != null)
+            {
+                thief.ForPego();
+            }
 
             // Depois de prender, pode voltar a patrulhar
             _guarda.targetEnemy = null;

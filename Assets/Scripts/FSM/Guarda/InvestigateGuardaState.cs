@@ -40,7 +40,7 @@ public class InvestigateGuardaState : BaseState<GuardaFSM.AIState>
       //se estiver perto do suspeito, confirma e perseguir
       float distancie = Vector3.Distance(
          _guarda.transform.position,
-         _guarda.transform.position);
+         _guarda.targetEnemy.position);
 
       if (distancie<= _guarda.detectionRange/2f)
       {

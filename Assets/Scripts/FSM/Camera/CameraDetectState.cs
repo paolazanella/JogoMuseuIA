@@ -13,6 +13,12 @@ public class CameraDetectState : BaseState<CameraFSM.AIState>
     {
         _camera = (CameraFSM)MyFsm;
         Debug.Log("🚨 Câmera detectou o ladrão! Avisando guardas...");
+        
+        //aleta simples usando a posição da câmera
+        if (SimpleGameManager.Instance != null)
+        {
+            SimpleGameManager.Instance.AlertarGuardas(_camera.transform.position);
+        }
     }
 
     public override CameraFSM.AIState GetNextState()

@@ -47,22 +47,17 @@ public class GuardaFSM : StateMachineManager<GuardaFSM.AIState>
 
     Transform GetNearestEnemy()
     {
-        var colliders = Physics2D.OverlapCircleAll(transform.position, detectionRange).ToList();
-        if (colliders.Count == 0) return null;
-
-        var smallestDistance = detectionRange * 2;
-        Collider2D closestCollider = null;
-        foreach (var c in colliders)
+        // Procura apenas objetos com tag "Player"
+        GameObject ladrao = GameObject.FindWithTag("Player");
+        if (ladrao == null) return null;
+    
+        float distance = Vector3.Distance(transform.position, ladrao.transform.position);
+        if (distance <= detectionRange)
         {
-            var dist = Vector2.Distance(transform.position, c.transform.position);
-            if (dist < smallestDistance)
-            {
-                smallestDistance = dist;
-                closestCollider = c;
-            }
+            return ladrao.transform;
         }
-        
-        return closestCollider?.transform;
+    
+        return null;
     }
 
     public void MoveTowards(Vector3 targetPos)
