@@ -20,10 +20,7 @@ public abstract class BaseState<EState> where EState : Enum
     public virtual void UpdateState(){}
     public virtual void FixedUpdate(){}
 
-    public virtual void LateUpdate()
-    {
-        Debug.Log("Auau");
-    }
+    public virtual void LateUpdate() {}
     
     // Triggers 2D
     public virtual void OnTriggerEnter2D(Collider2D other){}
