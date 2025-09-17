@@ -27,8 +27,14 @@ public class AlertGuardaState : BaseState<GuardaFSM.AIState>
 
         // colocar lógica extra, tipo:
         // - Notificar outros guardas
-        // - Ativar drones/câmeras
         // - Mudar cor do guarda para vermelho (feedback visual)
+        // - Ativar drones
+        // Verifica se o GameManager e o ladrão existem para evitar erros
+        if (SimpleGameManager.Instance != null && SimpleGameManager.Instance.ladrao != null)
+        {
+            // Pede ao GameManager para ativar todos os drones, passando o ladrão como alvo.
+            SimpleGameManager.Instance.AtivarDrones(SimpleGameManager.Instance.ladrao.transform);
+        }
     }
 
     public override GuardaFSM.AIState GetNextState()
@@ -50,4 +56,5 @@ public class AlertGuardaState : BaseState<GuardaFSM.AIState>
         // Continua em alerta
         return StateKey;
     }
+
 }
