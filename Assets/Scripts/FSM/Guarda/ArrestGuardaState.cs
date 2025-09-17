@@ -1,3 +1,4 @@
+
 using UnityEngine;
 
 public class ArrestGuardaState : BaseState<GuardaFSM.AIState>
@@ -32,14 +33,17 @@ public class ArrestGuardaState : BaseState<GuardaFSM.AIState>
             Debug.Log("Ladrão capturado!");
 
             // Chama método do ladrão
-            ThiefController thief = _guarda.targetEnemy.GetComponent<ThiefController>();
-            if (thief != null)
-            {
-                thief.ForPego();
-            }
+          //  ThiefController thief = _guarda.targetEnemy.GetComponent<ThiefController>();
+          //  if (thief != null)
+          //  {
+          //      thief.ForPego();
+          //  }
 
-            // Depois de prender, pode voltar a patrulhar
-            _guarda.targetEnemy = null;
+            //reseta a cena
+            UnityEngine.SceneManagement.SceneManager.LoadScene(
+                UnityEngine.SceneManagement.SceneManager.GetActiveScene().name
+            );
+
         }
     }
 
