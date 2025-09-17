@@ -7,6 +7,7 @@ public class SimpleGameManager : MonoBehaviour
     [Header("Referências")]
     public ThiefController ladrao;
     public GuardaFSM[] guardas;
+    public DroneFSM[] drones; 
     
     void Awake()
     {
@@ -37,4 +38,20 @@ public class SimpleGameManager : MonoBehaviour
             }
         }
     }
+
+    // Método chamado para ativar todos os drones
+    public void AtivarDrones(Transform alvo)
+    { 
+        // Passa por cada drone na lista de referências
+        foreach (var drone in drones)
+        {
+            // Define o alvo do drone. Isso fará com que o drone saia do estado 'Idle'.
+            if (drone != null)
+            {
+                drone.targetEnemy = alvo;
+                }
+            }
+        }
+    }
+
 }
